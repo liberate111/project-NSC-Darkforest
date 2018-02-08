@@ -6,14 +6,13 @@ using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
 public class hp_hud : NetworkBehaviour {
-    public gun GSCP;
+
     [SyncVar]
     public float i = 100;
     [SyncVar]
     public string playerName;
     public Transform red_hud;
-    public Transform cam;
-    public Transform M_Cam;
+
     public bool paa;
     [SerializeField]
     private GameObject HP_TEXT;
@@ -28,8 +27,8 @@ public class hp_hud : NetworkBehaviour {
     private float count_dead;
     private GameObject text_dead;
     public Transform body;
-    public Material mat_red;
-    public Material mat_green;
+
+
     public GameObject medic_icon;
     private GameObject test_player;
     public rifle r;
@@ -59,9 +58,7 @@ public class hp_hud : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //print(playerName);
-        //if(zombie_hit > 0 && lock_level == false)
-        //{
+
         if (g == null)
         {
             g = GameObject.Find("Level");
@@ -208,7 +205,7 @@ public class hp_hud : NetworkBehaviour {
     }
     void kine()
     {
-        cam.GetComponent<Rigidbody>().isKinematic = true;
+        //cam.GetComponent<Rigidbody>().isKinematic = true;
 
     }
     void startgameover()

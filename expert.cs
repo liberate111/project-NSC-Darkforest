@@ -31,6 +31,7 @@ public class expert : NetworkBehaviour
     public void cc()
     {
         CmdLevel();
+        
     }
     [Command]
     void CmdLevel()
@@ -40,9 +41,11 @@ public class expert : NetworkBehaviour
     [ClientRpc]
     void RpcLevel()
     {
-        l.zom_hit = 20;
+        print("RPC");
+        l.zom_hit = 5;
         if (diff != null && diff1 != null && diff2 != null)
         {
+            
             NetworkServer.Destroy(diff.gameObject);
             NetworkServer.Destroy(diff1.gameObject);
             NetworkServer.Destroy(diff2.gameObject);

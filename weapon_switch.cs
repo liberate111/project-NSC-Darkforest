@@ -12,6 +12,8 @@ public class weapon_switch : NetworkBehaviour {
     public Animator ani;
     GameObject tt;
     private bool wait_change;
+    private int a;
+    private bool s;
    
 	// Use this for initialization
 	void Start () {
@@ -25,36 +27,64 @@ public class weapon_switch : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!wait_change)
+        if(Input.GetAxis("R2") == 0)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha2)){
-             if (gun_rifle.GetComponent<rifle>().reloading == false && gun_rifle.GetComponent<rifle>().shooting == false)
-                {
-                  
-                gun_pistol.GetComponent<Animator>().SetBool("away", false);
-                gun_rifle.GetComponent<Animator>().SetBool("away", true);
-                StartCoroutine(wait_changing());
-                Invoke("enable_pistol", 0.7f);
-                gun_rifle.GetComponent<rifle>().enabled = false;
-                
-                
-                }
-            
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                
-                gun_pistol.GetComponent<Animator>().SetBool("away", true);
-                gun_rifle.GetComponent<Animator>().SetBool("away", false);
-                StartCoroutine(wait_changing());
-                Invoke("enable_rifle", 0.8f);
-                gun_pistol.GetComponent<gun>().enabled = false;
-                
-              
+                a = 0;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                a = 1;
+            }
+
+            if (Input.GetAxis("L2") == 1 && s == false)
+            {
+
+                if (a == 0)
+                {
+                    a = 1;
+                }
+                else if (a == 1)
+                {
+                    a = 0;
+                }
+                s = true;
+            }
+            else if (Input.GetAxis("L2") == 0)
+            {
+                s = false;
+            }
+            if (!wait_change)
+            {
+                if (a == 0)
+                {
+                    if (gun_rifle.GetComponent<rifle>().reloading == false && gun_rifle.GetComponent<rifle>().shooting == false)
+                    {
+
+                        gun_pistol.GetComponent<Animator>().SetBool("away", false);
+                        gun_rifle.GetComponent<Animator>().SetBool("away", true);
+                        StartCoroutine(wait_changing());
+                        Invoke("enable_pistol", 0.7f);
+                        gun_rifle.GetComponent<rifle>().enabled = false;
 
 
+                    }
+
+                }
+                else if (a == 1)
+                {
+
+                    gun_pistol.GetComponent<Animator>().SetBool("away", true);
+                    gun_rifle.GetComponent<Animator>().SetBool("away", false);
+                    StartCoroutine(wait_changing());
+                    Invoke("enable_rifle", 0.8f);
+                    gun_pistol.GetComponent<gun>().enabled = false;
+
+                }
             }
         }
+        
         if (isLocalPlayer)
         {
             if (gun_rifle.GetComponent<rifle>().enabled == true)

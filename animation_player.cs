@@ -6,7 +6,7 @@ public class animation_player : MonoBehaviour {
 
     public Animator ani;
     [SerializeField]
-    rifle r;
+    //rifle r;
 	// Use this for initialization
 	void Start () {
         ani = GetComponent<Animator>();
@@ -24,14 +24,14 @@ public class animation_player : MonoBehaviour {
         ani.SetFloat("InputMag", sum);
 
        
-            ani.SetBool("shot",r.shooting);
+            //ani.SetBool("shot",r.shooting);
         
        
         
-        if(r.shooting == true)
+        /*if(r.shooting == true)
         {
             ani.SetBool("shot", true);
-        }
+        }*/
         
     }
 }

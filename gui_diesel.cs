@@ -41,7 +41,7 @@ public class gui_diesel : NetworkBehaviour
         {
             time_count += Time.deltaTime;
         }
-        if(time_count > 15f)
+        if(time_count > 120f)
         {
             au.Stop();
             au_zombiehorde.Stop();

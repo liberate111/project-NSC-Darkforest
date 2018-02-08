@@ -8,7 +8,12 @@ public class check_diesel : NetworkBehaviour
 {
     private RaycastHit r;
     public bool a;
-    private Vector3 kkkk= new Vector3(35,79,44);
+
+    private GameObject x;
+
+    private Vector3 p11 = new Vector3(305, 100, 719.4f);
+    private Vector3 p12 = new Vector3(1032.3f, 100, 793.24f);
+    private Vector3 p13 = new Vector3(1198, 100, 658.6f);
 
     // Use this for initialization
     void Start()
@@ -23,43 +28,44 @@ public class check_diesel : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        //check bug
+        if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            transform.position = kkkk;
+            transform.position = p11;
         }
-            if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-
-            a = true;
-            print("pls");
-            StartCoroutine(delay_attack());
+            transform.position = p12;
         }
-        if (a == true)
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-         // kkkk = transform.position;
-                    //  GetComponent<Rigidbody>().isKinematic = false;
-                    GetComponent<FirstPersonController>().enabled = false;
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-
-
-                
-                GetComponent<FirstPersonController>().enabled = true;
-                //    GetComponent<Rigidbody>().isKinematic = true;
-            }
-
+            transform.position = p13;
         }
 
-        if (Physics.Raycast(transform.position, transform.forward, out r, 2))
+        if(a==true)
         {
-            //print(r.transform.name);
-            if (r.transform.tag == "diesel" && Input.GetKeyDown(KeyCode.F))
+            transform.position = x.transform.position;
+        }
+        if (Physics.Raycast(transform.position, transform.forward, out r, 5))
+        {
+
+            if (r.transform.tag == "diesel" && (Input.GetKeyDown(KeyCode.F) || Input.GetAxis("L1") == 1) )
             {
                 //print("d");
                 //r.transform.GetComponent<gui_diesel>().audioplay();
                 Cmdr(r.transform.gameObject);
             }
         }
+    }
+    public void getX(GameObject dummy)
+    {
+        x = dummy;
+        a = true;
+    }
+    public void stopX()
+    {
+        x = null;
+        a = false;
     }
     [Command]
     void Cmdr(GameObject r)
@@ -71,18 +77,5 @@ public class check_diesel : NetworkBehaviour
     {
         r.transform.GetComponent<gui_diesel>().audioplay();
     }
-    private IEnumerator delay_attack()
-    {
-        GetComponent<Rigidbody>().isKinematic = false;
-        GetComponent<FirstPersonController>().enabled = false;
-        GetComponent<Rigidbody>().AddForce(new Vector3(1, 1.5f, 0) * 400);
-        yield return new WaitForSeconds(2f);
-        kkkk = transform.position;
-        yield return new WaitForSeconds(0.1f);
-        transform.position = kkkk;
-        GetComponent<Rigidbody>().isKinematic = true;
-        GetComponent<FirstPersonController>().enabled = true;
-        GetComponent<FirstPersonController>().m_MoveDir = kkkk;
-        a = false;
-    }
+
 }

@@ -41,10 +41,13 @@ public class boss : NetworkBehaviour
     public Transform ui_scr;
     private int random_delay;
     private bool run_triggre;
+    public GameObject dummy;
+    private bool cannotatk;
+    private bool navzero;
     // Use this for initialization
     void Start()
     {
-
+        StartCoroutine(DD_attack());
         nav = GetComponent<UnityEngine.AI.NavMeshAgent>();
         red = GameObject.Find("Red").GetComponent<Animator>();
         ani = GetComponent<Animator>();
@@ -65,6 +68,19 @@ public class boss : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (cannotatk == true)
+        {
+            atk = false;
+          
+        }
+        if (navzero)
+        {
+            nav.speed = 0;
+        }
+        else
+        {
+            nav.speed = 7;
+        }
         //print(ti2);
         if (run_triggre == true)
         {
@@ -130,6 +146,10 @@ public class boss : NetworkBehaviour
 
         if (hp <= 0 && player != null)
         {
+            foreach (BoxCollider box in GetComponents<BoxCollider>())
+            {
+                box.enabled = false;
+            }
             if (locked == false)
             {
                 GetComponent<des_zombie>().desit = true;
@@ -163,7 +183,7 @@ public class boss : NetworkBehaviour
             if (player != null)
             {
                 player = FindClosestPlayer();
-                if (Vector3.Distance(player.transform.position, transform.position) < 30)
+                if (Vector3.Distance(player.transform.position, transform.position) < 60)
                 {
                     Cmdsync(player);
                     if (au.isPlaying == false)
@@ -178,9 +198,10 @@ public class boss : NetworkBehaviour
                 }
 
 
-                if (Vector3.Distance(transform.position, player.transform.position) < 9f)
+                if (Vector3.Distance(transform.position, player.transform.position) < 10f)
                 {
-                    if (Vector3.Distance(transform.position, player.transform.position) < 9f)
+                  
+                    if (Vector3.Distance(transform.position, player.transform.position) < 3f)
                     {
                         var q = Quaternion.LookRotation(player.transform.position - transform.position);
                         transform.rotation = Quaternion.Lerp(transform.rotation, q, 9 * Time.deltaTime);
@@ -245,7 +266,12 @@ public class boss : NetworkBehaviour
     }
     private IEnumerator attack(GameObject player_now)
     {
+        GameObject dummy_ball = Instantiate(dummy, player.transform.position, Quaternion.identity) as GameObject;
+        dummy_ball.GetComponent<Rigidbody>().AddForce(new Vector3(1,1,0) * 452);
+        player.GetComponent<check_diesel>().getX(dummy_ball);
         int a = Random.Range(0, 2);
+        navzero = true;
+
         if (a == 0)
         {
             ani.Play("attack");
@@ -274,6 +300,7 @@ public class boss : NetworkBehaviour
         }
 
         yield return new WaitForSeconds(0.9f);
+       
         if (atk == true)
         {
          
@@ -290,8 +317,11 @@ public class boss : NetworkBehaviour
             //aui.Play();
         }
         yield return new WaitForSeconds(0.67f);
+        Destroy(dummy_ball);
+        player.GetComponent<check_diesel>().stopX();
         //player_now.GetComponent<FirstPersonController>().m_RunSpeed = 10;
         //player.GetComponent<FirstPersonController>().m_WalkSpeed = 5;
+        navzero = false;
         atking = false;
 
 
@@ -325,6 +355,16 @@ public class boss : NetworkBehaviour
             }
         }
         return closest;
+    }
+    private IEnumerator DD_attack()
+    {
+        cannotatk = true;
+        //nav.speed = 0;
+        navzero = true;
+        yield return new WaitForSeconds(5.57f);
+        //nav.speed = 7;
+        navzero = false;
+        cannotatk = false;
     }
     [Command]
     void Cmdsync(GameObject p)

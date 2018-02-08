@@ -20,11 +20,12 @@ public class rifle : MonoBehaviour {
         au = GetComponent<AudioSource>();
         ammo = 30;
         all_ammo = 90;
-        g = GetComponentInParent<gunsound>();
+       
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        
         if(transform.tag == "deadplayer")
         {
             shooting = false;
@@ -62,18 +63,20 @@ public class rifle : MonoBehaviour {
         
         if (reloading == false && ammo > 0)
         {
-            if (Input.GetMouseButtonDown(0) && ammo > 0)
+            if ((Input.GetMouseButtonDown(0) || Input.GetAxis("R1") == 1) && ammo > 0)
             {
                 shooting = true;
                
 
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButton(0)!=true && Input.GetAxis("R1") == 0)
             {
                 shooting = false;
                 ani.SetBool("shot", false);
                 //au.loop = false;
+                if(g.au!=null)
                 g.au.loop = false;
+           
             }
             if(ani.GetBool("run")== true)
             {
@@ -97,6 +100,7 @@ public class rifle : MonoBehaviour {
                 //au.loop = true;
                 g.au.loop = true;
                 au.clip = ac[0];  //reload sound for me only
+                
                 if(g.au.isPlaying == false)
                 {
                     g.soundShoot();
@@ -105,7 +109,7 @@ public class rifle : MonoBehaviour {
 
 
             }
-            if (Input.GetMouseButtonDown(0) && ani.GetBool("run") == false && ani.GetBool("reload") == false )
+            if ((Input.GetMouseButtonDown(0)||Input.GetAxis("R1")==1) && ani.GetBool("run") == false && ani.GetBool("reload") == false )
             {
                 ani.Play("shoot");
                 //au.Play();
@@ -114,10 +118,12 @@ public class rifle : MonoBehaviour {
             }
             
         }
-        if (Input.GetKeyDown(KeyCode.R) && reloading == false && ammo < 30 && all_ammo > 0 && ani.GetBool("run") == false)
+        if ((Input.GetKeyDown(KeyCode.R)||Input.GetAxis("O")==1) && reloading == false && ammo < 30 && all_ammo > 0 && ani.GetBool("run") == false&&shooting==false)
         {
             //play sound reload ammo !!
             //print("yyyy");
+            au.clip = ac[1];
+            au.Play();
             StartCoroutine(Wait_Reload());
             reloading = true;
             if(all_ammo > 30 && ammo != 30)
@@ -126,7 +132,7 @@ public class rifle : MonoBehaviour {
                 ammo = 30;
                 all_ammo -= (30 - buf_ammo);
             }
-            else if(all_ammo < 30 && ammo != 30)
+            else if(all_ammo <= 30 && ammo != 30)
             {
                 buf_ammo = ammo;
                 if(buf_ammo + all_ammo > 30)
@@ -147,13 +153,23 @@ public class rifle : MonoBehaviour {
                 all_ammo = 0;
             }
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)|| Input.GetAxis("R2") > 0.5f)
         {
             ani.SetBool("run", true);
+            GetComponentInParent<weapon_switch>().enabled = false;
+            g.au.Stop();
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift)){
+        else if ((Input.GetKey(KeyCode.LeftShift)!=true && Input.GetAxis("R2")  == 0))
+        {
             ani.SetBool("run", false);
+            if(GetComponentInParent<weapon_switch>().gun_pistol.GetComponent<gun>().enabled == false)
+            {
+                GetComponentInParent<weapon_switch>().enabled = true;
+            }
+            
         }
+
 	}
     IEnumerator Wait_Reload()
     {

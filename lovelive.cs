@@ -42,13 +42,13 @@ public class lovelive : NetworkBehaviour {
 	void Update () {
         if (hold_toheal_friend == true)
         {
-            if (Input.GetKeyDown(KeyCode.G))
+            if (Input.GetKeyDown(KeyCode.G)||Input.GetAxis("X") == 1)
             {
                 x = true;
 
             }
         }
-        if (Input.GetKeyUp(KeyCode.G))
+        if (Input.GetKey(KeyCode.G)!= true && Input.GetAxis("X") == 0)
         {
             x = false;
             hold_toheal_friend = false;
@@ -124,13 +124,13 @@ public class lovelive : NetworkBehaviour {
                     medic_icon.SetActive(true);
 
 
-                    if (Input.GetKeyDown(KeyCode.Q))
+                    if (Input.GetKeyDown(KeyCode.Q)|| Input.GetAxis("[]") == 1)
                     {
                         hold_toheal = true;
                     
 
                     }
-                    if (Input.GetKeyUp(KeyCode.Q))
+                    if (Input.GetKey(KeyCode.Q)!= true && Input.GetAxis("[]") == 0)
                     {
 
                         hold_toheal = false;
@@ -145,7 +145,7 @@ public class lovelive : NetworkBehaviour {
                 {
                     if (ray.transform.tag == "ammobox")
                     {
-                        if (Input.GetKeyDown(KeyCode.F))
+                        if (Input.GetKeyDown(KeyCode.F) ||  Input.GetAxis("L1") == 1)
                         {
 
                             //Destroy(ray.transform.gameObject);
@@ -158,7 +158,7 @@ public class lovelive : NetworkBehaviour {
                     }
                     if (ray.transform.tag == "medkit")
                     {
-                        if (Input.GetKeyDown(KeyCode.F) && had_medic == false)
+                        if ((Input.GetKeyDown(KeyCode.F) ||  Input.GetAxis("L1") == 1) && had_medic == false)
                         {
                             //print("destroy");
                             had_medic = true;

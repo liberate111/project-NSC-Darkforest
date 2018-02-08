@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class bulletui : MonoBehaviour {
     [SerializeField]
-     gun gun;
+    //gun gun;
     private Text te;
 
     public int canuse;
     public int max;
 	// Use this for initialization
 	void Start () {
-        gun = null;
+        //gun = null;
         te = GetComponent<Text>();
 
     }

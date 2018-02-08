@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class removebullet : NetworkBehaviour{
-    public float t=0;
+    private float t=0;
     public GameObject blood;
 	// Use this for initialization
 	void Start () {

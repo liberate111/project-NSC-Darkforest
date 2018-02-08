@@ -14,18 +14,19 @@ public class gun : NetworkBehaviour {
     private AudioSource Gun_sound;
     public AudioClip[] sa;
     public GameObject bullet;
-    public Transform bul_Hit;
+   
     [SerializeField]
     public int o;
     public int allammo;
     public GameObject cartage;
     public GameObject car_spot;
-    public GameObject buller_spwan;
+   
     public Transform gaden;
     public GameObject fpsplayer;
     public int HP;
     
-   // public Light sang; //lighting enable
+
+    // public Light sang; //lighting enable
     [SerializeField]
     private int W_locked;
     private bool ready_joy;
@@ -36,55 +37,58 @@ public class gun : NetworkBehaviour {
 
     public gunsound g;
     // Use this for initialization
-    void Start () {
+    void Start() {
         // guntext = GameObject.Find("Gun_ammo").transform;
-        bbuild.GetComponentInParent<build_bullet>();
-        ani = GetComponent<Animator>(); 
+        bbuild=GetComponentInParent<build_bullet>();
+        ani = GetComponent<Animator>();
         Gun_sound = GetComponent<AudioSource>();
-        o = 8;
-        allammo = 91;
+        o = 6;
+        allammo = 999;
         HP = 100;
 
         // ani.SetBool("away", true);
         g = GetComponentInParent<gunsound>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-       // guntext.GetComponent<bulletui>().canuse = o;
-      //  guntext.GetComponent<bulletui>().max = allammo;
-        if (Input.GetAxis("Fire1") == 0)
-        {
-            ready_joy = true;
-            
-        }
-  
-   /*    if (W_locked == 0)  
-        {
-            hold = true;
-            if(ani.GetBool("away")==false)
-            ani.SetBool("away", true);
-        }
-        else if(W_locked == 1)
-        {
-            if (ani.GetBool("away") == true)
-                StartCoroutine(gundelay());
 
-        }*/
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+    // Update is called once per frame
+    void Update() {
+        // guntext.GetComponent<bulletui>().canuse = o;
+        //  guntext.GetComponent<bulletui>().max = allammo;
+      
+
+        /*    if (W_locked == 0)  
+             {
+                 hold = true;
+                 if(ani.GetBool("away")==false)
+                 ani.SetBool("away", true);
+             }
+             else if(W_locked == 1)
+             {
+                 if (ani.GetBool("away") == true)
+                     StartCoroutine(gundelay());
+
+             }*/
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetAxis("R2") > 0.5f)
         {
             
              running = true;
-                   // print(fpsplayer.GetComponent<Rigidbody>().velocity);
-                    ani.SetBool("running", true);
-           
+             ani.SetBool("running", true);
+             GetComponentInParent<weapon_switch>().enabled = false;
 
-        }else if (Input.GetKeyUp(KeyCode.LeftShift) )
+
+        }
+        else if (Input.GetKey(KeyCode.LeftShift) != true && Input.GetAxis("R2") == 0)
         {
             running = false;
             ani.SetBool("running", false);
+            if (GetComponentInParent<weapon_switch>().gun_rifle.GetComponent<rifle>().enabled == false)
+            {
+                GetComponentInParent<weapon_switch>().enabled = true;
+            }
+
+
         }
-        if ((((Input.GetAxis("Fire1") >0&&ready_joy==true)|| Input.GetMouseButtonDown(0))&&o>0&& !this.ani.GetCurrentAnimatorStateInfo(0).IsName("reload")&&running==false))
+        if ((((Input.GetAxis("Fire1") >0 && ready_joy==true)|| Input.GetMouseButtonDown(0) || Input.GetAxis("R1") == 1) && o > 0 && !this.ani.GetCurrentAnimatorStateInfo(0).IsName("reload") && running==false))
         {
             if (!this.ani.GetCurrentAnimatorStateInfo(0).IsName("shoot")&& !this.ani.GetCurrentAnimatorStateInfo(0).IsName("zero")&&Reloading==false)
             {
@@ -97,7 +101,7 @@ public class gun : NetworkBehaviour {
                     ani.Play("shoot");
                     Gun_sound.clip = sa[Random.Range(0, 2)];
                     //Gun_sound.Play();
-                    g.soundShoot();
+                    GetComponentInParent<gun_pistol_sound>().pistol_soundShoot();
                     GameObject ss = Instantiate(cartage, car_spot.transform.position, Quaternion.Euler(90, 0, 0)) as GameObject;
                     ss.GetComponent<Rigidbody>().AddForce((gaden.position - car_spot.transform.position) * Random.Range(300, 340));
                     o--;
@@ -108,7 +112,7 @@ public class gun : NetworkBehaviour {
             }
 
         }
-        else if( o== 0&&allammo>0)
+        else if( o == 0 && allammo > 0 )
         {
           /*  if(Reloading == false)
             {
@@ -129,16 +133,16 @@ public class gun : NetworkBehaviour {
            
 
         }
-       if ((Input.GetAxis("Reload") > 0 || Input.GetKeyDown(KeyCode.R) ) &&Reloading==false&&running==false&&allammo>0)
+       if ((Input.GetKeyDown(KeyCode.R) || Input.GetAxis("O") == 1) && Reloading==false && running==false && allammo > 0 && Input.GetAxis("R1")==0)
             {
             if (!this.ani.GetCurrentAnimatorStateInfo(0).IsName("shoot"))
             {
-                if(o<8)
+                if(o < 6)
                 Reloading = true;
             }
             }
      
-        if (Reloading == true&&ani.GetBool("reload")==false)
+        if (Reloading == true && ani.GetBool("reload")==false)
         {
             // o = 0;
             if (Gun_sound.isPlaying == false)
@@ -152,7 +156,7 @@ public class gun : NetworkBehaviour {
          
 
         }
-        else if(Reloading==false)
+        else if(Reloading == false)
         {
             ani.SetBool("reload", false);
         }
@@ -166,13 +170,13 @@ public class gun : NetworkBehaviour {
     {
         yield return new WaitForSeconds(2.17f);
         // print("WaitAndPrint " + Time.time);
-        int a= 8-o;
+        int a= 6-o;
         if (ani.GetBool("away") == false)
         {
             if (a <= allammo)
             {
                 allammo -= a;
-                o = 8;
+                o = 6;
             }
             else if (allammo < a)
             {

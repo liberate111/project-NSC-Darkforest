@@ -16,7 +16,7 @@ public class basic_zombie :NetworkBehaviour {
     private int hp;
     public Animator ani;
     RaycastHit ray;
-    public GameObject blood;
+    
     public bool check_dy;
     private bool atk;
     private bool atking;
@@ -128,7 +128,10 @@ public class basic_zombie :NetworkBehaviour {
                 locked = true;
             }
             
-
+            foreach(BoxCollider box in GetComponents<BoxCollider>())
+            {
+                box.enabled = false;
+            }
             // Destroy(this.gameObject);
             if (check_dy == false)
             {
@@ -153,7 +156,7 @@ public class basic_zombie :NetworkBehaviour {
             if (player != null)
             {
                 player = FindClosestPlayer();
-                if (Vector3.Distance(player.transform.position, transform.position) < 30)
+                if (Vector3.Distance(player.transform.position, transform.position) < 30 && player!=null)
                 {
                     Cmdsync(player);
 

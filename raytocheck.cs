@@ -63,13 +63,13 @@ public class raytocheck : NetworkBehaviour {
                 if (ray.transform.tag == "deadplayer")
                 {
                     player_x = ray.transform.gameObject;
-                    if (Input.GetKeyDown(KeyCode.E))
+                    if (Input.GetKeyDown(KeyCode.E) || Input.GetAxis("tri") == 1)
                     {
                         holdto_revive = true;
 
 
                     }
-                    else if (Input.GetKeyUp(KeyCode.E))
+                    else if (Input.GetKey(KeyCode.E) != true && Input.GetAxis("tri") == 0)
                     {
                         holdto_revive = false;
                     }

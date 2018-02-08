@@ -64,7 +64,7 @@ public class death_check :NetworkBehaviour {
     void Rpcdeadth(int x)
     {
         if(x==0)
-        SceneManager.LoadScene("win");     // GAME OVER
+            SceneManager.LoadScene("gameover");     // GAME OVER
         else
         {
             SceneManager.LoadScene("win");  // WIN

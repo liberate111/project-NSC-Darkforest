@@ -9,10 +9,17 @@ public class spwanbot : NetworkBehaviour {
     private GameObject player;
     public bool lo;
     private float xti;
+    [SerializeField]
+    private int time_spw_bot;
+    public bool force_LO;
 	// Use this for initialization
 	void Start () {
         //InvokeRepeating("botbot",3,10);
-       // player = GameObject.FindGameObjectWithTag("Player");
+        // player = GameObject.FindGameObjectWithTag("Player");
+        if (force_LO)
+        {
+            Invoke("IOawake", 4);
+        }
 
     }
 	
@@ -21,7 +28,7 @@ public class spwanbot : NetworkBehaviour {
         if (lo == true)
         {
             xti = xti + Time.deltaTime;
-            if (xti > 10)
+            if (xti > time_spw_bot)
             {
                 botbot();
                 xti = 0;
@@ -34,6 +41,10 @@ public class spwanbot : NetworkBehaviour {
         //Instantiate(bot, transform.position, Quaternion.identity) ;
         Cmdsp();
 
+    }
+    void IOawake()
+    {
+        lo = true;
     }
     [Command]
     void Cmdsp()

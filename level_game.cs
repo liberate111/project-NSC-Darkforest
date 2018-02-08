@@ -16,7 +16,7 @@ public class level_game : NetworkBehaviour {
 	void Update () {
 		if(zom_hit > 0)
         {
-
+            //Cmdlevel(zom_hit);
         }
 	}
     [Command]

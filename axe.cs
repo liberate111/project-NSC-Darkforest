@@ -20,7 +20,7 @@ public class axe : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        W_locked = GetComponentInParent<weapon_switch>().W_lock;
+        //W_locked = GetComponentInParent<weapon_switch>().W_lock;
         if ((Input.GetAxis("Fire1") > 0 || Input.GetMouseButtonDown(0))&& hold == false)
         {
             if (!ani.GetCurrentAnimatorStateInfo(0).IsName("axe_swing"))

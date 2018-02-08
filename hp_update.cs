@@ -23,12 +23,12 @@ public class hp_update : NetworkBehaviour {
     [Command]
     void CmdSynchp()
     {
-         x = GetComponent<hp_hud>().i;
+        //x = GetComponent<hp_hud>().i;
         RpcHp(x);
     }
     [ClientRpc]
     void RpcHp(float x)
     {
-        GetComponent<hp_hud>().i = x;
+        //GetComponent<hp_hud>().i = x;
     }
 }
